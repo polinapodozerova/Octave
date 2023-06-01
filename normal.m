@@ -1,35 +1,31 @@
-% Определение функции поверхности
-z = @(x, y) 20 - x.^2 - y.^2;
-
-% Задание диапазона значений x и y
-x = linspace(-pi, pi, 100);
-y = linspace(-pi, pi, 100);
-[X, Y] = meshgrid(x, y);
-
-% Вычисление значений z на основе функции
-Z = z(X, Y);
-
-% Построение поверхности
-figure;
-surf(X, Y, Z);
+clc;
+clearvars;
 xlabel('x');
 ylabel('y');
 zlabel('z');
-title('3D Surface');
+title('Surface');
+axis equal;
 
-% Указанная точка (x0, y0)
+f = @(x, y) 20 - x.^2 - y.^2;
+x = -pi:0.1:pi;
+y = -pi:0.1:pi;
+[X, Y] = meshgrid(x, y);
+Z = 20 - X.^2 - Y.^2;
+
+surf(X, Y, Z);
+hold on;
 x0 = 0;
 y0 = -1;
+z0 = f(x0, y0);
 
-% Вычисление значения z в указанной точке
-z0 = z(x0, y0);
+h = 0.000001;
+f_der_x = -2*x0
+f_der_y = -2*y0
 
-% Вычисление нормали в указанной точке
-[grad_y, grad_x] = gradient(Z);
-grad_x0 = interp2(X, Y, grad_x, x0, y0);
-grad_y0 = interp2(X, Y, grad_y, x0, y0);
-axis equal;
-% Построение нормали
-hold on;
-quiver3(x0, y0, z0, grad_y0, -grad_x0, 5, 'r', 'Linewidth', 5);
-hold off;
+n = [-f_der_x -f_der_y 1]
+
+x_norm = [x0 x0+n(1)];
+y_norm = [y0 y0+n(2)];
+z_norm = [z0 z0+n(3)];
+
+plot3(x_norm, y_norm, z_norm, 'r', 'linewidth', 4);
